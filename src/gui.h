@@ -155,6 +155,7 @@ typedef struct {
     PurchaseDlg *purchase_dlg;
     Group *deploy_window;
     Edit *edit;
+    Edit *cheat; /* cheat console */
     Group *base_menu; /* basic menu (switch airmode, deploy, end turn, menu ...) */
     Group *main_menu; /* main game menu */
     Group *opt_menu;  /* options */
@@ -267,9 +268,9 @@ void gui_show_expected_losses( Unit *att, Unit *def, int att_dam, int def_dam );
 Draw the actual losses to the label.
 ====================================================================
 */
-void gui_show_actual_losses( Unit *att, Unit *def, 
+void gui_show_actual_losses( Unit *att, Unit *def,
     int att_suppr, int att_dam, int def_suppr, int def_dam );
-    
+
 /*
 ====================================================================
 Draw the given unit's strength or suppression to the given label
@@ -326,7 +327,7 @@ void gui_show_deploy_window();
 /*
 ====================================================================
 Handle deploy window.
-  gui_handle_deploy_motion: 'unit' is the unit the cursor is 
+  gui_handle_deploy_motion: 'unit' is the unit the cursor is
       currently above
   gui_handle_deploy_click: 'new_unit' is set True if a new unit was
       selected (which is 'deploy_unit' ) else False
@@ -346,7 +347,7 @@ void gui_scroll_deploy_down();
 
 /*
 ====================================================================
-Update deploy list. Unit is either removed or added to 
+Update deploy list. Unit is either removed or added to
 left_deploy_units and the deploy window is updated.
 ====================================================================
 */
@@ -377,7 +378,7 @@ void gui_render_file_name( void *item, SDL_Surface *buffer );
 
 /*
 ====================================================================
-Handle the selection of a scenario file (display info and 
+Handle the selection of a scenario file (display info and
 load scen_info from full path)
 ====================================================================
 */
@@ -385,7 +386,7 @@ void gui_render_scen_info( const char *path, SDL_Surface *buffer );
 
 /*
 ====================================================================
-Handle the selection of a campaign file (display info and 
+Handle the selection of a campaign file (display info and
 load scen_info from full path)
 ====================================================================
 */

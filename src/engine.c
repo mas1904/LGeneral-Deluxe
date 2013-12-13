@@ -77,7 +77,7 @@ Engine
 */
 int modify_fog = 0;      /* if this is False the fog initiated by
                             map_set_fog() is kept throughout the turn
-                            else it's updated with movement mask etc */   
+                            else it's updated with movement mask etc */
 int cur_ctrl = 0;        /* current control type (equals player->ctrl if set else
                             it's PLAYER_CTRL_NOBODY) */
 Player *cur_player = 0;  /* current player pointer */
@@ -105,7 +105,7 @@ Unit *cur_atk = 0;       /* current attacker - if not defensive fire it's
                             identical with cur_unit */
 Unit *cur_def = 0;       /* is the current defender - identical with cur_target
                             if not defensive fire (then it's cur_unit) */
-List *df_units = 0;      /* this is a list of defensive fire units giving support to 
+List *df_units = 0;      /* this is a list of defensive fire units giving support to
                             cur_target. as long as this list isn't empty cur_unit
                             becomes the cur_def and cur_atk is the current defensive
                             unit. if this list is empty in the last step
@@ -118,12 +118,12 @@ int split_unit_count = 0;
 Unit *split_units[MAP_SPLIT_UNIT_LIMIT]; /* list of split partners */
 int cur_split_str = 0;
 /* DISPLAY */
-enum { 
+enum {
     SC_NONE = 0,
     SC_VERT,
     SC_HORI
-};    
-int sc_type = 0, sc_diff = 0;  /* screen copy type. used to speed up complete map updates */   
+};
+int sc_type = 0, sc_diff = 0;  /* screen copy type. used to speed up complete map updates */
 SDL_Surface *sc_buffer = 0;    /* screen copy buffer */
 int *hex_mask = 0;             /* used to determine hex from pointer pos */
 int map_x, map_y;              /* current position in map */
@@ -198,7 +198,7 @@ enum {
     PHASE_SURRENDER_MSG,        /* display surrender message */
     PHASE_END_COMBAT,           /* clear status and redraw */
     /* MOVEMENT */
-    PHASE_INIT_MOVE,            /* initiate movement */ 
+    PHASE_INIT_MOVE,            /* initiate movement */
     PHASE_START_SINGLE_MOVE,    /* initiate movement to next way point from current position */
     PHASE_RUN_SINGLE_MOVE,      /* run single movement and call START_SINGLE_MOVEMENT when done */
     PHASE_CHECK_LAST_MOVE,      /* check last single move for suprise contact, flag capture, scenario end */
@@ -242,7 +242,7 @@ Locals
 ====================================================================
 Forwarded
 ====================================================================
-*/          
+*/
 static void engine_draw_map();
 static void engine_update_info( int mx, int my, int region );
 static void engine_goto_xy( int x, int y );
@@ -274,7 +274,7 @@ static void engine_finish_scenario()
     gui_set_cursor( CURSOR_STD );
     engine_select_player( 0, 0 );
     turn = scen_info->turn_limit;
-    engine_set_status( STATUS_NONE ); 
+    engine_set_status( STATUS_NONE );
     phase = PHASE_NONE;
 }
 
@@ -344,7 +344,7 @@ static void engine_draw_bkgnd()
             SOURCE( gui->wallpaper, 0, 0 );
             blit_surf();
         }
-    DEST( sdl.screen, 
+    DEST( sdl.screen,
           ( sdl.screen->w - gui->bkgnd->w ) / 2,
           ( sdl.screen->h - gui->bkgnd->h ) / 2,
           gui->bkgnd->w, gui->bkgnd->h );
@@ -408,7 +408,7 @@ static void engine_prep_camp_brief()
     gui_delete_message_pane(camp_pane);
     camp_pane = 0;
     engine_draw_bkgnd();
-    
+
     camp_pane = gui_create_message_pane();
     /* make up scenario text */
     {
@@ -430,7 +430,7 @@ static void engine_prep_camp_brief()
         }
         gui_set_message_pane_text(camp_pane, txt);
     }
-    
+
     /* provide options or default id */
     if (camp_cur_scen->scen) {
       gui_set_message_pane_default(camp_pane, "nextscen");
@@ -438,13 +438,13 @@ static void engine_prep_camp_brief()
       List *ids = camp_get_result_list();
       List *vals = list_create(LIST_NO_AUTO_DELETE, LIST_NO_CALLBACK);
       char *result;
-      
+
       list_reset(ids);
       while ((result = list_next(ids))) {
           const char *desc = camp_get_description(result);
           list_add(vals, desc ? (void *)desc : (void *)result);
       }
-      
+
       /* no ids means finishing state */
       if (ids->count == 0)
           gui_set_message_pane_default(camp_pane, " ");
@@ -453,11 +453,11 @@ static void engine_prep_camp_brief()
           gui_set_message_pane_default(camp_pane, list_first(ids));
       else
           gui_set_message_pane_options(camp_pane, ids, vals);
-      
+
       list_delete(ids);
       list_delete(vals);
     }
-    
+
     gui_draw_message_pane(camp_pane);
     engine_set_status(STATUS_CAMP_BRIEFING);
 }
@@ -576,7 +576,7 @@ static void engine_check_unit_buttons()
     else
         group_set_active( gui->unit_buttons, ID_UNDO, 0 );
     /* air embark */
-    if ( map_check_unit_embark( cur_unit, cur_unit->x, cur_unit->y, EMBARK_AIR, 0 ) || 
+    if ( map_check_unit_embark( cur_unit, cur_unit->x, cur_unit->y, EMBARK_AIR, 0 ) ||
          map_check_unit_debark( cur_unit, cur_unit->x, cur_unit->y, EMBARK_AIR, 0 ) )
         group_set_active( gui->unit_buttons, ID_EMBARK_AIR, 1 );
     else
@@ -730,11 +730,11 @@ static void engine_show_final_message()
     gui->font_turn_info->align = ALIGN_X_CENTER | ALIGN_Y_CENTER;
     write_text( gui->font_turn_info, sdl.screen, sdl.screen->w / 2, sdl.screen->h / 2, scen_get_result_message(), 255 );
     refresh_screen( 0, 0, 0, 0 );
-    while ( !engine_status_screen_dismissed() ) { 
-        SDL_PumpEvents(); 
-        SDL_Delay( 20 ); 
+    while ( !engine_status_screen_dismissed() ) {
+        SDL_PumpEvents();
+        SDL_Delay( 20 );
     }
-    event_clear(); 
+    event_clear();
 }
 
 /*
@@ -750,7 +750,7 @@ static void engine_show_turn_info()
     FULL_DEST( sdl.screen );
     fill_surf( 0x0 );
 #if 0
-#  define i time_factor 
+#  define i time_factor
     gui->font_std->align = ALIGN_X_LEFT | ALIGN_Y_TOP;
     text_x = text_y = 0;
     write_line( sdl.screen, gui->font_std, "Charset Test (latin1): Flöße über Wasser. \241Señálalo!", text_x, &text_y );
@@ -771,7 +771,7 @@ static void engine_show_turn_info()
     sprintf( text, tr("Next Player: %s"), cur_player->name );
     write_text( gui->font_turn_info, sdl.screen, text_x, text_y, text, OPAQUE );
     text_y += gui->font_turn_info->height;
-                            
+
     if ( deploy_turn ) {
         if ( cur_player->ctrl == PLAYER_CTRL_HUMAN ) {
             text_y += gui->font_turn_info->height;
@@ -786,7 +786,7 @@ static void engine_show_turn_info()
         /* don't show screen for computer-controlled players */
         return;
     }
-    
+
     if ( turn + 1 < scen_info->turn_limit ) {
         sprintf( text, tr("Remaining Turns: %i"), scen_info->turn_limit - turn );
         write_text( gui->font_turn_info, sdl.screen, text_x, text_y, text, OPAQUE );
@@ -977,7 +977,7 @@ static void engine_select_player( Player *player, int skip_unit_prep )
     Player *human;
     int i, human_count, x, y;
     Unit *unit;
-	
+
     cur_player = player;
     if ( player )
         cur_ctrl = player->ctrl;
@@ -1002,7 +1002,7 @@ static void engine_select_player( Player *player, int skip_unit_prep )
     switch ( cur_ctrl ) {
         case PLAYER_CTRL_HUMAN:
             modify_fog = 1;
-            map_set_spot_mask(); 
+            map_set_spot_mask();
             map_set_fog( F_SPOT );
             break;
         case PLAYER_CTRL_NOBODY:
@@ -1020,7 +1020,7 @@ static void engine_select_player( Player *player, int skip_unit_prep )
             }
             else {
                 modify_fog = 1;
-                map_set_spot_mask(); 
+                map_set_spot_mask();
                 map_set_fog( F_SPOT );
             }
             break;
@@ -1029,7 +1029,7 @@ static void engine_select_player( Player *player, int skip_unit_prep )
     if ( !skip_unit_prep )
 	    for (x=0;x<map_w;x++)
 		for (y=0;y<map_h;y++)
-		    if (map[x][y].deploy_center > 1 && map[x][y].player == 
+		    if (map[x][y].deploy_center > 1 && map[x][y].player ==
 								cur_player)
 			map[x][y].deploy_center--;
     /* set influence mask */
@@ -1050,7 +1050,7 @@ static void engine_select_player( Player *player, int skip_unit_prep )
         while ( ( unit = list_next( units ) ) )
             if ( unit->player == cur_player )
                 scen_adjust_unit_supply_level( unit );
-            
+
         /* mark unit as re-deployable in deployment-turn when it is
          * located on a deployment-field and is allowed to be re-deployed.
          */
@@ -1079,7 +1079,7 @@ static void engine_select_player( Player *player, int skip_unit_prep )
 /*
 ====================================================================
 Begin turn of next player. Therefore select next player or use
-'forced_player' if not NULL (then the next is the one after 
+'forced_player' if not NULL (then the next is the one after
 'forced_player').
 If 'skip_unit_prep' is set scen_prep_unit() is not called.
 ====================================================================
@@ -1116,7 +1116,7 @@ static void engine_begin_turn( Player *forced_player, int skip_unit_prep )
             image_hide( gui->cursors, 0 );
             gui_set_cursor( CURSOR_STD );
             engine_select_player( 0, skip_unit_prep );
-            engine_set_status( STATUS_NONE ); 
+            engine_set_status( STATUS_NONE );
             phase = PHASE_NONE;
             return;
         }
@@ -1143,7 +1143,7 @@ static void engine_begin_turn( Player *forced_player, int skip_unit_prep )
         image_hide( gui->cursors, 0 );
         gui_set_cursor( CURSOR_STD );
         engine_select_player( 0, skip_unit_prep );
-        engine_set_status( STATUS_NONE ); 
+        engine_set_status( STATUS_NONE );
         phase = PHASE_NONE;
         end_scen = 1;
         return;
@@ -1184,7 +1184,7 @@ static void engine_begin_turn( Player *forced_player, int skip_unit_prep )
 
 /*
 ====================================================================
-End turn of current player without selecting next player. Here 
+End turn of current player without selecting next player. Here
 autosave happens, aircrafts crash, units get supplied.
 ====================================================================
 */
@@ -1221,11 +1221,11 @@ static void engine_end_turn()
                     if (unit->cur_fuel<0) unit->cur_fuel = 0;
                 }
                 /* supply? */
-                scen_adjust_unit_supply_level( unit );        
+                scen_adjust_unit_supply_level( unit );
                 if ( unit->supply_level > 0 )
                 {
                     unit->unused = 1; /* required to fuel up */
-                    unit_supply( unit, UNIT_SUPPLY_ALL ); 
+                    unit_supply( unit, UNIT_SUPPLY_ALL );
                 }
                 /* crash if no fuel */
                 if (unit->cur_fuel == 0)
@@ -1237,7 +1237,7 @@ static void engine_end_turn()
     }
     /* remove all units that were killed in the last turn */
     list_reset( units );
-    for ( i = 0; i < units->count; i++ ) 
+    for ( i = 0; i < units->count; i++ )
     {
         unit = list_next(units);
         if ( unit->killed ) {
@@ -1301,7 +1301,7 @@ static int engine_get_map_pos( int sx, int sy, int *mx, int *my, int *region )
     if ( status == STATUS_STRAT_MAP ) {
         /* strategic map */
         if ( strat_map_get_pos( sx, sy, mx, my ) ) {
-            if ( *mx < 0 || *my < 0 || *mx >= map_w || *my >= map_h ) 
+            if ( *mx < 0 || *my < 0 || *mx >= map_w || *my >= map_h )
                 return 0;
             return 1;
         }
@@ -1354,7 +1354,7 @@ static int engine_get_map_pos( int sx, int sy, int *mx, int *my, int *region )
 
 /*
 ====================================================================
-If x,y is not on screen center this map tile and check if 
+If x,y is not on screen center this map tile and check if
 screencopy is possible (but only if use_sc is True)
 ====================================================================
 */
@@ -1435,12 +1435,12 @@ static void engine_check_scroll(int by_wheel)
         /* keys */
         scroll_hori = scroll_vert = SCROLL_NONE;
         if ( !scroll_block_keys ) {
-            if ( event_check_key( SDLK_UP ) && map_y > 0) 
+            if ( event_check_key( SDLK_UP ) && map_y > 0)
                 scroll_vert = SCROLL_UP;
             else
                 if ( event_check_key( SDLK_DOWN ) && map_y < map_h - map_sh )
                     scroll_vert = SCROLL_DOWN;
-            if ( event_check_key( SDLK_LEFT ) && map_x > 0 ) 
+            if ( event_check_key( SDLK_LEFT ) && map_x > 0 )
                 scroll_hori = SCROLL_LEFT;
             else
                 if ( event_check_key( SDLK_RIGHT ) && map_x < map_w - map_sw )
@@ -1497,23 +1497,23 @@ static void engine_draw_map()
     int use_frame = ( cur_ctrl != PLAYER_CTRL_CPU );
     enum Stage { DrawTerrain, DrawUnits, DrawDangerZone } stage = DrawTerrain;
     enum Stage top_stage = has_danger_zone ? DrawDangerZone : DrawUnits;
-    
+
     /* reset_timer(); */
-    
+
     draw_map = 0;
-    
+
     if ( status == STATUS_STRAT_MAP ) {
         sc_type = SC_NONE;
         strat_map_draw();
         return;
     }
-    
+
     if ( status == STATUS_TITLE || status == STATUS_TITLE_MENU ) {
         sc_type = SC_NONE;
         engine_draw_bkgnd();
         return;
     }
-    
+
     /* screen copy? */
     start_map_x = map_x;
     start_map_y = map_y;
@@ -1744,8 +1744,8 @@ static void engine_update_info( int mx, int my, int region )
         frame_hide( gui->qinfo2, 1 );
         return;
     }
-	if ( cur_unit && cur_unit->cur_mov > 0 && mask[mx][my].in_range && 
-         !mask[mx][my].blocked ) 
+	if ( cur_unit && cur_unit->cur_mov > 0 && mask[mx][my].in_range &&
+         !mask[mx][my].blocked )
         moveCost = mask[mx][my].moveCost;
     /* entered a new tile so update the terrain info */
     if (status == STATUS_PURCHASE) {
@@ -1771,8 +1771,8 @@ static void engine_update_info( int mx, int my, int region )
         sprintf( str, "%s (%i,%i)", map[mx][my].name, mx, my );
         label_write( gui->label, gui->font_status, str );
     }
-    /* DEBUG: 
-    sprintf( str, "(%d,%d), P: %d B: %d I: %d D: %d",mx,my,mask[mx][my].in_range-1,mask[mx][my].blocked,mask[mx][my].vis_infl,mask[mx][my].distance); 
+    /* DEBUG:
+    sprintf( str, "(%d,%d), P: %d B: %d I: %d D: %d",mx,my,mask[mx][my].in_range-1,mask[mx][my].blocked,mask[mx][my].vis_infl,mask[mx][my].distance);
     label_write( gui->label, gui->font_std, str ); */
     /* update the unit info */
     if ( !mask[mx][my].spot ) {
@@ -1798,7 +1798,7 @@ static void engine_update_info( int mx, int my, int region )
                 else
                     if ( map[mx][my].g_unit )
                         unit1 = map[mx][my].g_unit;
-        } 
+        }
         if ( unit1 )
             gui_show_quick_info( gui->qinfo1, unit1 );
         else
@@ -2015,26 +2015,26 @@ static void engine_handle_button( int id )
             break;
         /* options */
         case ID_C_SOUND:
-#ifdef WITH_SOUND            
+#ifdef WITH_SOUND
             config.sound_on = !config.sound_on;
             audio_enable( config.sound_on );
-#endif        
+#endif
             break;
         case ID_C_SOUND_INC:
-#ifdef WITH_SOUND            
+#ifdef WITH_SOUND
             config.sound_volume += 16;
             if ( config.sound_volume > 128 )
                 config.sound_volume = 128;
             audio_set_volume( config.sound_volume );
-#endif        
+#endif
             break;
         case ID_C_SOUND_DEC:
-#ifdef WITH_SOUND            
+#ifdef WITH_SOUND
             config.sound_volume -= 16;
             if ( config.sound_volume < 0 )
                 config.sound_volume = 0;
             audio_set_volume( config.sound_volume );
-#endif        
+#endif
             break;
         case ID_C_SUPPLY:
             config.supply = !config.supply;
@@ -2187,8 +2187,8 @@ static void engine_handle_button( int id )
             else
             {
                 int drop = 0;
-                if (cur_unit->prop.flags&PARACHUTE) 
-                {    
+                if (cur_unit->prop.flags&PARACHUTE)
+                {
                     int x = cur_unit->x, y = cur_unit->y;
                     drop = 1;
                     if (map[x][y].terrain->flags[cur_weather] & SUPPLY_AIR)
@@ -2327,7 +2327,7 @@ static void engine_handle_button( int id )
             strat_map_update_unit_layer();
             set_delay( &blink_delay, 500 );
             draw_map = 1;
-            break; 
+            break;
         case ID_SCEN_CANCEL:
             fdlg_hide( gui->scen_dlg, 1 );
             engine_set_status( STATUS_NONE );
@@ -2476,8 +2476,8 @@ static void engine_handle_button( int id )
 		i = select_dlg_get_selected_item_index( gui->vmode_dlg );
 		if (i == -1)
 			break;
-		action_queue_set_vmode( sdl.vmodes[i].width, 
-					sdl.vmodes[i].height, 
+		action_queue_set_vmode( sdl.vmodes[i].width,
+					sdl.vmodes[i].height,
 					sdl.vmodes[i].fullscreen);
 		select_dlg_hide( gui->vmode_dlg, 1 );
 		label_hide(gui->label, 1);
@@ -2560,7 +2560,7 @@ static void engine_check_events(int *reinit)
 	    /* if gui->label is hidden we are on a gui window and there is no
 	     * tooltip; in case of purchase dialogue unhide it to show prestige
 	     * info */
-	    if ( status == STATUS_PURCHASE && 
+	    if ( status == STATUS_PURCHASE &&
 					gui->label->frame->img->bkgnd->hide )
 		 label_hide( gui->label, 0 );
         }
@@ -2570,7 +2570,7 @@ static void engine_check_events(int *reinit)
                 engine_handle_button( last_button->id );
 #ifdef WITH_SOUND
                 wav_play( gui->wav_click );
-#endif                
+#endif
             }
             else {
                 switch ( status ) {
@@ -2628,7 +2628,7 @@ static void engine_check_events(int *reinit)
                                 if ( button == BUTTON_RIGHT )
                                     engine_hide_game_menu();
                                 break;
-                            case STATUS_DEPLOY_INFO:    
+                            case STATUS_DEPLOY_INFO:
                                 engine_hide_deploy_unit_info();
                                 break;
                             case STATUS_DEPLOY:
@@ -2640,8 +2640,8 @@ static void engine_check_events(int *reinit)
                                     else if ( deploy_unit && mask[mx][my].deploy ) {
                                         Unit *old_unit;
                                         /* embark to air if embarkable and explicitly on air region in deploy turn */
-                                        if ( deploy_turn && 
-                                             map_check_unit_embark( deploy_unit, mx, my, EMBARK_AIR, 1 ) && 
+                                        if ( deploy_turn &&
+                                             map_check_unit_embark( deploy_unit, mx, my, EMBARK_AIR, 1 ) &&
                                              (region==REGION_AIR||map[mx][my].g_unit) )
                                             map_embark_unit( deploy_unit, -1, -1, EMBARK_AIR, 0 );
                                         /* embark into sea transport if placed onto ocean */
@@ -2665,7 +2665,7 @@ static void engine_check_events(int *reinit)
                                         draw_map = 1;
                                     }
                                     /* undeploy unit of other region? */
-                                    else 
+                                    else
                                         unit=map_get_undeploy_unit(mx,my,region!=REGION_AIR);
                                     if (unit) { /* undeploy? */
                                         map_remove_unit( unit );
@@ -2696,7 +2696,7 @@ static void engine_check_events(int *reinit)
                                     mask[cur_unit->x][cur_unit->y].fog = 0;
                                     draw_map = 1;
                                 }
-                                else 
+                                else
                                     if ( button == BUTTON_LEFT )
                                         if ( mask[mx][my].deploy ) {
                                             action_queue_debark_air( cur_unit, mx, my, 0 );
@@ -2715,7 +2715,7 @@ static void engine_check_events(int *reinit)
                                     mask[cur_unit->x][cur_unit->y].fog = 0;
                                     draw_map = 1;
                                 }
-                                else 
+                                else
                                     if ( button == BUTTON_LEFT )
                                         if ( mask[mx][my].merge_unit ) {
                                             action_queue_merge( cur_unit, mask[mx][my].merge_unit );
@@ -2734,7 +2734,7 @@ static void engine_check_events(int *reinit)
                                     mask[cur_unit->x][cur_unit->y].fog = 0;
                                     draw_map = 1;
                                 }
-                                else 
+                                else
                                     if ( button == BUTTON_LEFT )
                                     {
                                         if ( mask[mx][my].split_unit||mask[mx][my].split_okay ) {
@@ -2744,7 +2744,7 @@ static void engine_check_events(int *reinit)
                                             engine_set_status( STATUS_NONE );
                                             gui_set_cursor(CURSOR_STD);
                                             draw_map = 1;
-                                        } 
+                                        }
                                     }
                                 break;
                             case STATUS_UNIT_MENU:
@@ -2865,7 +2865,7 @@ static void engine_check_events(int *reinit)
                 if (status == STATUS_CAMP_BRIEFING) {
                      const char *result;
                      gui_handle_message_pane_event(camp_pane, cx, cy, button, 0);
-                     
+
                      /* check for selection/dismission */
                      result = gui_get_message_pane_selection(camp_pane);
                      if (result && strcmp(result, "nextscen") == 0) {
@@ -2900,7 +2900,7 @@ static void engine_check_events(int *reinit)
             }
         if ( SDL_PollEvent( &event ) )
         {
-            if ( event.type == SDL_KEYDOWN ) 
+            if ( event.type == SDL_KEYDOWN )
             {
                 /* allow mirroring anywhere */
                 if (event.key.keysym.sym==SDLK_TAB)
@@ -2910,8 +2910,8 @@ static void engine_check_events(int *reinit)
                 }
                 if ( status == STATUS_NONE || status == STATUS_INFO || status == STATUS_UNIT_MENU ) {
                     int shiftPressed = event.key.keysym.mod&KMOD_LSHIFT||event.key.keysym.mod&KMOD_RSHIFT;
-                    if ( (status != STATUS_UNIT_MENU) && (event.key.keysym.sym == SDLK_n || 
-                         (event.key.keysym.sym == SDLK_f&&!shiftPressed) || 
+                    if ( (status != STATUS_UNIT_MENU) && (event.key.keysym.sym == SDLK_n ||
+                         (event.key.keysym.sym == SDLK_f&&!shiftPressed) ||
                          (event.key.keysym.sym == SDLK_m&&!shiftPressed) ) ) {
                         int stype = (event.key.keysym.sym==SDLK_n)?0:(event.key.keysym.sym==SDLK_f)?1:2;
                         /* select next unit that has either movement
@@ -2919,14 +2919,14 @@ static void engine_check_events(int *reinit)
                         list_reset( units );
                         if ( cur_unit != 0 )
                             while ( ( unit = list_next( units ) ) )
-                                if ( cur_unit == unit ) 
+                                if ( cur_unit == unit )
                                     break;
                         /* get next unit */
                         while ( ( unit = list_next( units ) ) ) {
                             if ( unit->killed ) continue;
                             if ( unit->is_guarding ) continue;
                             if ( unit->player == cur_player )
-                                if ( ((stype==0||stype==2)&&unit->cur_mov > 0) || 
+                                if ( ((stype==0||stype==2)&&unit->cur_mov > 0) ||
                                      ((stype==0||stype==1)&&unit->cur_atk_count > 0) )
                                     break;
                         }
@@ -2937,7 +2937,7 @@ static void engine_check_events(int *reinit)
                                 if ( unit->killed ) continue;
                                 if ( unit->is_guarding ) continue;
                                 if ( unit->player == cur_player )
-                                    if ( ((stype==0||stype==2)&&unit->cur_mov > 0) || 
+                                    if ( ((stype==0||stype==2)&&unit->cur_mov > 0) ||
                                          ((stype==0||stype==1)&&unit->cur_atk_count > 0) )
                                         break;
                             }
@@ -2954,7 +2954,7 @@ static void engine_check_events(int *reinit)
                         keypressed = 1;
                     } else
                     if ( (status != STATUS_UNIT_MENU) && (event.key.keysym.sym == SDLK_p ||
-                         (event.key.keysym.sym == SDLK_f&&shiftPressed) || 
+                         (event.key.keysym.sym == SDLK_f&&shiftPressed) ||
                          (event.key.keysym.sym == SDLK_m&&shiftPressed) ) ) {
                         int stype = (event.key.keysym.sym==SDLK_p)?0:(event.key.keysym.sym==SDLK_f)?1:2;
                         /* select previous unit that has either movement
@@ -2962,14 +2962,14 @@ static void engine_check_events(int *reinit)
                         list_reset( units );
                         if ( cur_unit != 0 )
                             while ( ( unit = list_next( units ) ) )
-                                if ( cur_unit == unit ) 
+                                if ( cur_unit == unit )
                                     break;
                         /* get previous unit */
                         while ( ( unit = list_prev( units ) ) ) {
                             if ( unit->killed ) continue;
                             if ( unit->is_guarding ) continue;
                             if ( unit->player == cur_player )
-                                if ( ((stype==0||stype==2)&&unit->cur_mov > 0) || 
+                                if ( ((stype==0||stype==2)&&unit->cur_mov > 0) ||
                                      ((stype==0||stype==1)&&unit->cur_atk_count > 0) )
                                     break;
                         }
@@ -2980,7 +2980,7 @@ static void engine_check_events(int *reinit)
                                 if ( unit->killed ) continue;
                                 if ( unit->is_guarding ) continue;
                                 if ( unit->player == cur_player )
-                                    if ( ((stype==0||stype==2)&&unit->cur_mov > 0) || 
+                                    if ( ((stype==0||stype==2)&&unit->cur_mov > 0) ||
                                          ((stype==0||stype==1)&&unit->cur_atk_count > 0) )
                                         break;
                             }
@@ -3008,7 +3008,7 @@ static void engine_check_events(int *reinit)
                             case SDLK_g: if (status!=STATUS_UNIT_MENU) engine_handle_button(ID_C_GRID); break;
                             case SDLK_PERIOD: if (status!=STATUS_UNIT_MENU) engine_handle_button(ID_C_SHOW_STRENGTH); break;
                             case SDLK_i: if (status!=STATUS_UNIT_MENU) engine_handle_button(ID_SCEN_INFO); break;
-                                
+
                             case SDLK_u: engine_handle_button(ID_UNDO); break;
                             case SDLK_s: engine_handle_button(ID_SUPPLY); break;
                             case SDLK_j: engine_handle_button(ID_MERGE); break;
@@ -3023,7 +3023,7 @@ static void engine_check_events(int *reinit)
                             case SDLK_9:
                                 keystate = SDL_GetKeyState(&numkeys);
                                 if (keystate[SDLK_x])
-                                        engine_handle_button(ID_SPLIT_1+event.key.keysym.sym-SDLK_1); 
+                                        engine_handle_button(ID_SPLIT_1+event.key.keysym.sym-SDLK_1);
                                 break;
                             case SDLK_MINUS:
                                 if (cur_unit) cur_unit->is_guarding = !cur_unit->is_guarding;
@@ -3056,7 +3056,7 @@ static void engine_check_events(int *reinit)
                     else
                         if ( event.key.keysym.sym == SDLK_ESCAPE )
                             hide_edit = 1;
-                    if ( hide_edit ) {    
+                    if ( hide_edit ) {
                         engine_set_status( STATUS_NONE );
                         edit_hide( gui->edit, 1 );
                         old_mx = old_my = -1;
@@ -3064,6 +3064,7 @@ static void engine_check_events(int *reinit)
                     }
                     else {
                         edit_handle_key( gui->edit, event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.unicode );
+                        edit_handle_key( gui->cheat, event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.unicode );
 #ifdef WITH_SOUND
                         wav_play( gui->wav_edit );
 #endif
@@ -3091,7 +3092,7 @@ static int engine_get_next_combatants()
 {
     int fight = 0;
     char str[128];
-    /* check if there are supporting units; if so initate fight 
+    /* check if there are supporting units; if so initate fight
        between attacker and these units */
     if ( df_units->count > 0 ) {
         cur_atk = list_first( df_units );
@@ -3112,7 +3113,7 @@ static int engine_get_next_combatants()
     }
     else {
         /* clear info */
-        if ( !blind_cpu_turn ) 
+        if ( !blind_cpu_turn )
             label_hide( gui->label, 1 );
         /* normal attack */
         cur_atk = cur_unit;
@@ -3174,7 +3175,7 @@ static int engine_capture_flag( Unit *unit ) {
                     map[unit->x][unit->y].player = unit->player;
                     /* a conquered flag gets deploy ability again after some turns */
                     map[unit->x][unit->y].deploy_center = 3;
-                    /* a regular flag gives 40, a victory objective 80, 
+                    /* a regular flag gives 40, a victory objective 80,
                      * no prestige loss for other player */
                     unit->player->cur_prestige += 40;
                     if (map[unit->x][unit->y].obj)
@@ -3183,7 +3184,7 @@ static int engine_capture_flag( Unit *unit ) {
                 }
     return 0;
 }
-                                
+
 /*
 ====================================================================
 Deqeue the next action and perform it.
@@ -3198,7 +3199,7 @@ static void engine_handle_next_action( int *reinit )
     if ( status == STATUS_CONF || status == STATUS_ATTACK || status == STATUS_MOVE )
         return;
     /* get action */
-    if ( ( action = actions_dequeue() ) == 0 ) 
+    if ( ( action = actions_dequeue() ) == 0 )
         return;
     /* handle it */
     switch ( action->type ) {
@@ -3243,7 +3244,7 @@ static void engine_handle_next_action( int *reinit )
             if ( action->full ) flags |= SDL_FULLSCREEN;
             depth = SDL_VideoModeOK( action->w, action->h, 32, flags );
             if ( depth == 0 ) {
-                fprintf( stderr, tr("Video Mode: %ix%i, Fullscreen: %i not available\n"), 
+                fprintf( stderr, tr("Video Mode: %ix%i, Fullscreen: %i not available\n"),
                          action->w, action->h, action->full );
             }
             else {
@@ -3429,7 +3430,7 @@ static void engine_handle_next_action( int *reinit )
             break;
         case ACTION_ATTACK:
             if ( !unit_check_attack( action->unit, action->target, UNIT_ACTIVE_ATTACK ) ) {
-                fprintf( stderr, tr("'%s' (%i,%i) can not attack '%s' (%i,%i)\n"), 
+                fprintf( stderr, tr("'%s' (%i,%i) can not attack '%s' (%i,%i)\n"),
                          action->unit->name, action->unit->x, action->unit->y,
                          action->target->name, action->target->x, action->target->y );
                 break;
@@ -3493,13 +3494,13 @@ static void engine_update( int ms )
                     }
                     way = map_get_unit_way_points( move_unit, dest_x, dest_y, &way_length, &surp_unit );
                     if ( way == 0 ) {
-                        fprintf( stderr, tr("There is no way for unit '%s' to move to %i,%i\n"), 
+                        fprintf( stderr, tr("There is no way for unit '%s' to move to %i,%i\n"),
                                  move_unit->name, dest_x, dest_y );
                         phase = PHASE_END_MOVE;
                         break;
                     }
                     /* remove unit influence */
-                    if ( !player_is_ally( move_unit->player, cur_player ) ) 
+                    if ( !player_is_ally( move_unit->player, cur_player ) )
                         map_remove_unit_infl( move_unit );
                     /* backup the unit but only if this is not a fleeing unit! */
                     if ( fleeing_unit )
@@ -3520,17 +3521,17 @@ static void engine_update( int ms )
                         move_unit->cur_mov = mask[dest_x][dest_y].in_range - 1;
                     else*/
                         move_unit->cur_mov = 0;
-                    if ( move_unit->cur_mov < 0 ) 
+                    if ( move_unit->cur_mov < 0 )
                         move_unit->cur_mov = 0;
                     /* no entrenchment */
                     move_unit->entr = 0;
                     /* build up the image */
                     if ( !blind_cpu_turn ) {
-                        move_image = image_create( create_surf( move_unit->sel_prop->icon->w, 
+                        move_image = image_create( create_surf( move_unit->sel_prop->icon->w,
                                                                 move_unit->sel_prop->icon->h, SDL_SWSURFACE ),
                                                    move_unit->sel_prop->icon_w, move_unit->sel_prop->icon_h,
-                                                   sdl.screen, 0, 0 ); 
-                        image_set_region( move_image, move_unit->icon_offset, 0, 
+                                                   sdl.screen, 0, 0 );
+                        image_set_region( move_image, move_unit->icon_offset, 0,
                                           move_unit->sel_prop->icon_w, move_unit->sel_prop->icon_h );
                         SDL_FillRect( move_image->img, 0, move_unit->sel_prop->icon->format->colorkey );
                         SDL_SetColorKey( move_image->img, SDL_SRCCOLORKEY, move_unit->sel_prop->icon->format->colorkey );
@@ -3552,7 +3553,7 @@ static void engine_update( int ms )
                     /* animate */
                     phase = PHASE_START_SINGLE_MOVE;
                     /* play sound */
-#ifdef WITH_SOUND   
+#ifdef WITH_SOUND
                     if ( !mask[move_unit->x][move_unit->y].fog )
                         wav_play( move_unit->sel_prop->wav_move );
 #endif
@@ -3593,7 +3594,7 @@ static void engine_update( int ms )
                     /* units looking direction */
                     unit_adjust_orient( move_unit, way[way_pos].x, way[way_pos].y );
                     if ( !blind_cpu_turn )
-                        image_set_region( move_image, move_unit->icon_offset, 0, 
+                        image_set_region( move_image, move_unit->icon_offset, 0,
                                           move_unit->sel_prop->icon_w, move_unit->sel_prop->icon_h );
                     /* units position */
                     move_unit->x = way[way_pos].x; move_unit->y = way[way_pos].y;
@@ -3670,7 +3671,7 @@ static void engine_update( int ms )
                     break;
                 case PHASE_END_MOVE:
                     /* fade out sound */
-#ifdef WITH_SOUND         
+#ifdef WITH_SOUND
                     audio_fade_out( 0, 500 ); /* move sound channel */
 #endif
                     /* decrease fuel for way_pos hex tiles of movement */
@@ -3799,7 +3800,7 @@ static void engine_update( int ms )
                             reset_delay( &msg_delay );
                             phase = PHASE_EVASION;
                         }
-                        else 
+                        else
                             phase = PHASE_PREP_EXPLOSIONS;
                     }
                     break;
@@ -3847,7 +3848,7 @@ static void engine_update( int ms )
                     }
                     phase = PHASE_SHOW_EXPLOSIONS;
                     /* play sound */
-#ifdef WITH_SOUND                    
+#ifdef WITH_SOUND
                     if ( def_damage_delta || atk_damage_delta )
                         wav_play( terrain_icons->wav_expl );
 #endif
@@ -3932,7 +3933,7 @@ static void engine_update( int ms )
                                     broken_up = 1;
                                 }
                                 else
-                                /* total suppression may only cause fleeing or 
+                                /* total suppression may only cause fleeing or
                                    surrender if: both units are ground/naval units in
                                    close combat: the unit that causes suppr must
                                    have range 0 (melee)
@@ -3941,7 +3942,7 @@ static void engine_update( int ms )
                                 if (!(cur_atk->sel_prop->flags&FLYING)&&
                                     !(cur_def->sel_prop->flags&FLYING))
                                 {
-                                    if ( atk_result & AR_UNIT_SUPPRESSED && 
+                                    if ( atk_result & AR_UNIT_SUPPRESSED &&
                                          !(atk_result & AR_TARGET_SUPPRESSED) &&
                                          cur_def->sel_prop->rng==0 ) {
                                         /* cur_unit is suppressed */
@@ -3961,7 +3962,7 @@ static void engine_update( int ms )
                                             }
                                     }
                                     else
-                                        if ( atk_result & AR_TARGET_SUPPRESSED && 
+                                        if ( atk_result & AR_TARGET_SUPPRESSED &&
                                              !(atk_result & AR_UNIT_SUPPRESSED) &&
                                              cur_atk->sel_prop->rng==0 ) {
                                             /* cur_target is suppressed */
@@ -4004,7 +4005,7 @@ static void engine_update( int ms )
                     break;
                 case PHASE_SURRENDER_MSG:
                     if ( timed_out( &msg_delay, ms ) ) {
-                        if ( surrender_unit == cur_atk ) { 
+                        if ( surrender_unit == cur_atk ) {
                             cur_unit = 0;
                             cur_atk = 0;
                         }
@@ -4023,8 +4024,8 @@ static void engine_update( int ms )
                         label_hide( gui->label, 1 );
                     }
                     break;
-                case PHASE_END_COMBAT:    
-#ifdef WITH_SOUND                
+                case PHASE_END_COMBAT:
+#ifdef WITH_SOUND
                     audio_fade_out( 2, 1500 ); /* explosion sound channel */
 #endif
                     /* costs one fuel point for attacker */
@@ -4114,7 +4115,7 @@ static void engine_main_loop( int *reinit )
             else
                 set_delay( &scroll_delay, 0 );
         }
-        if ( timed_out( &scroll_delay, ms ) ) 
+        if ( timed_out( &scroll_delay, ms ) )
             scroll_block = 0;
         /* update */
         engine_update( ms );
@@ -4185,7 +4186,7 @@ int engine_init()
         group_set_hidden( gui->unit_buttons, ID_MERGE, config.merge_replacements );
         group_set_hidden( gui->unit_buttons, ID_SPLIT, config.merge_replacements );
     }
-    else 
+    else
         if ( setup.type == SETUP_INIT_CAMP ) {
             if ( !camp_load( setup.fname ) ) return 0;
             camp_set_cur( setup.scen_state );
@@ -4239,7 +4240,7 @@ int engine_init()
                     player->ai_run = ai_run;
                     player->ai_finalize = ai_finalize;
                     if ( player->ai_mod_handle ) {
-                        dlclose( player->ai_mod_handle ); 
+                        dlclose( player->ai_mod_handle );
                         player->ai_mod_handle = 0;
                     }
                 }
