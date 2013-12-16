@@ -178,7 +178,8 @@ enum {
     STATUS_RUN_MODULE_DLG,     /* select ai module */
     STATUS_CAMP_BRIEFING,      /* run campaign briefing dialogue */
     STATUS_PURCHASE,           /* run unit purchase dialogue */
-    STATUS_VMODE_DLG           /* run video mode selection */
+    STATUS_VMODE_DLG,          /* run video mode selection */
+    STATUS_CHEAT               /* run cheat mode */
 };
 int status;                    /* statuses defined in engine_tools.h */
 enum {
@@ -2908,6 +2909,12 @@ static void engine_check_events(int *reinit)
                     gui_mirror_asymm_windows();
                     keypressed = 1;
                 }
+                if (event.key.keysym.sym==SDLK_BACKQUOTE)
+                {
+                    edit_hide(gui->cheat, !gui->cheat->label->frame->img->bkgnd->hide);
+                    status=STATUS_CHEAT;
+                    keypressed = 1;
+                }
                 if ( status == STATUS_NONE || status == STATUS_INFO || status == STATUS_UNIT_MENU ) {
                     int shiftPressed = event.key.keysym.mod&KMOD_LSHIFT||event.key.keysym.mod&KMOD_RSHIFT;
                     if ( (status != STATUS_UNIT_MENU) && (event.key.keysym.sym == SDLK_n ||
@@ -3064,6 +3071,37 @@ static void engine_check_events(int *reinit)
                     }
                     else {
                         edit_handle_key( gui->edit, event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.unicode );
+#ifdef WITH_SOUND
+                        wav_play( gui->wav_edit );
+#endif
+                    }
+                } else if ( status == STATUS_CHEAT ) {
+                    if ( event.key.keysym.sym == SDLK_RETURN ) {
+                        //will add function the console code
+                        if ( strcmp( gui->cheat->text, "hide" ) == 0 )
+                            hide_edit=1;
+                        /* apply */
+/*                        switch ( status ) {
+                            case STATUS_RENAME:
+                                strcpy_lt( cur_unit->name, gui->edit->text, 20 );
+                                hide_edit = 1;
+                                break;
+                            case STATUS_SAVE:
+                                slot_save( slot_id, gui->edit->text );
+                                hide_edit = 1;
+                                printf( tr("Game saved to slot '%i' as '%s'.\n"), slot_id, gui->edit->text );
+                                break;
+                        }*/
+                        keypressed = 1;
+                    }
+                    if ( hide_edit ) {
+                        engine_set_status( STATUS_NONE );
+                        edit_hide( gui->cheat, 1 );
+                        old_mx = old_my = -1;
+                        scroll_block_keys = 0;
+                    }
+                    else {
+                        if(event.key.keysym.sym!=SDLK_BACKQUOTE)
                         edit_handle_key( gui->cheat, event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.unicode );
 #ifdef WITH_SOUND
                         wav_play( gui->wav_edit );

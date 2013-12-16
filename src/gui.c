@@ -349,8 +349,9 @@ int gui_load( char *dir )
         goto failure;
     edit_hide( gui->edit, 1 );
     /* cheat console */
-    if ( ( gui->cheat = edit_create( gui_create_frame( sdl.screen->w - 10, 30 ), 160, gui->font_std, 20, sdl.screen, 0, 0 ) ) == 0 )
+    if ( ( gui->cheat = edit_create( gui_create_frame( 630, 30 ), 160, gui->font_std, 40, sdl.screen, 0, 0 ) ) == 0 )
         goto failure;
+    edit_hide( gui->cheat, 1 );
     /* base menu */
     sprintf( transitionPath, "Themes/menu0_buttons" );
     search_file_name( path2, transitionPath, dir, 'i' );
